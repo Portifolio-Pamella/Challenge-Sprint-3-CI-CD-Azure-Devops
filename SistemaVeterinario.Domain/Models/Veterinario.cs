@@ -7,8 +7,9 @@ namespace SistemaVeterinario.Domain.Models;
 
 [Table("TB_VETERINARIO")]
 public class Veterinario
-{ // <- A chave que faltava foi adicionada aqui
+{
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     [Column("ID_VETERINARIO")]
     [SwaggerSchema("Identificador único")]
     public decimal IdVeterinario { get; set; }
@@ -39,5 +40,7 @@ public class Veterinario
 
     [Required]
     [Column("DATA_CADASTRO_VETERINARIO")]
-    public DateTime DataCadastroVeterinario { get; set; } = DateTime.Now;
-}
+    public DateTime DataCadastroVeterinario
+    {
+        get.Set() } = DateTime.Now; // Nota: Se o seu código usa DateTime.Now, mantenha assim
+    }

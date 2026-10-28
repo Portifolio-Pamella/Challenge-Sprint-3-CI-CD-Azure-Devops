@@ -1,0 +1,78 @@
+trigger:
+  branches:
+    include:
+      - master
+      - main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  dotnetSdkVersion: '8.x.x'
+
+stages:
+- stage: BuildAndTest
+  displayName: 'Estágio 1: CI - Build e Testes'
+  jobs:
+  - job: BuildJob
+    displayName: 'Compilar e Testar .NET 8'
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Instalar SDK do .NET 8'
+      inputs:
+        version: '$(dotnetSdkVersion)'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Restaurar Dependências'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Compilar Projeto (Build)'
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Executar Testes Automáticos'
+      inputs:
+        command: 'test'
+        projects: '**/*Tests/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Publicar Artefato'
+      inputs:
+        command: 'publish'
+        publishWebProjects: true
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Enviar Artefato para o Azure DevOps'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: DeployToAzure
+  displayName: 'Estágio 2: CD - Deploy no Azure Web App'
+  dependsOn: BuildAndTest
+  condition: succeeded()
+  jobs:
+  - deployment: DeployJob
+    displayName: 'Deploy Web App'
+    environment: 'Production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            displayName: 'Publicar no Azure App Service'
+            inputs:
+              azureSubscription: 'Sua-Conexao-Com-O-Azure' # Substituir pela Service Connection criada no Azure DevOps
+              appType: 'webAppLinux'
+              appName: 'clyvo-api-rm565206'
+              package: '$(Pipeline.Workspace)/drop/**/*.zip'

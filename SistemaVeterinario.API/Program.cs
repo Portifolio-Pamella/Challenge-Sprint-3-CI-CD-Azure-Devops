@@ -1,12 +1,13 @@
-using SistemaVeterinario.API.Services;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SistemaVeterinario.API.Services;
 using SistemaVeterinario.Application.Extensions;
+using SistemaVeterinario.Application.Service; // <-- Adicionado para reconhecer o HistoricoAtendimentoService
 using SistemaVeterinario.Infrastructure.Extensions;
+using SistemaVeterinario.Infrastructure.NoSql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,18 @@ var jwtAudience = builder.Configuration["Jwt:Audience"];
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// ==========================================
+// REGISTRO DO MONGODB (NO-SQL)
+// ==========================================
+builder.Services.Configure<MongoDBSettings>(
+    builder.Configuration.GetSection("GameStoreDatabase"));
+
+builder.Services.AddSingleton<MongoDbContext>();
+
+// Registro do Serviço NoSQL de Histórico de Atendimento
+builder.Services.AddSingleton<HistoricoAtendimentoService>();
+// ==========================================
+
 // Adiciona o Liveness check diretamente na API
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy(), tags: new[] { "live" });
@@ -26,7 +39,7 @@ builder.Services.AddHealthChecks()
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Configuração do Swagger para suportar o Token JWT
+// Configuração do Swagger atualizada para suportar o Token JWT (Cadeado no Swagger)
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -83,14 +96,17 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Clyvo API V1");
+    c.RoutePrefix = string.Empty; // Faz o Swagger abrir direto na raiz da URL!
+});
 
-// Mapeamento dos Health Checks
+// Mapeamento dos Health Checks exigidos pelo professor
 app.MapHealthChecks("/health/live", new HealthCheckOptions
 {
     Predicate = check => check.Tags.Contains("live")
 });
-
 app.MapHealthChecks("/health/ready", new HealthCheckOptions
 {
     Predicate = check => check.Tags.Contains("ready"),
@@ -106,6 +122,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-// 👇 ADICIONADO: Expõe a classe Program para o projeto de testes de integração
-public partial class Program { }

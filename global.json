@@ -1,6 +1,6 @@
-{
+cd ~/Challenge-Sprint-3-CI-CD-Azure-Devops
+echo '{
   "sdk": {
-    "version": "10.0.401",
-    "allowPrerelease": false
+    "version": "9.0.320"
   }
-}
+}' > global.json

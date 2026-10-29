@@ -11,12 +11,12 @@ using SistemaVeterinario.Infrastructure.NoSql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Leitura das chaves do JWT a partir do appsettings.json
-var jwtKey = builder.Configuration["Jwt:Key"];
-var jwtIssuer = builder.Configuration["Jwt:Issuer"];
-var jwtAudience = builder.Configuration["Jwt:Audience"];
+// Leitura das chaves do JWT a partir do appsettings.json ou variáveis de ambiente
+var jwtKey = builder.Configuration["Jwt:Key"] ?? builder.Configuration["Jwt__Key"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? builder.Configuration["Jwt__Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? builder.Configuration["Jwt__Audience"];
 
-// Adiciona as camadas
+// Adiciona as camadas da aplicação e infraestrutura
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -31,7 +31,8 @@ builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddSingleton<HistoricoAtendimentoService>();
 
 // ==========================================
-// Adiciona o Liveness check diretamente na API
+// HEALTH CHECKS
+// ==========================================
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy(), tags: new[] { "live" });
 
@@ -99,7 +100,6 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Clyvo API V1");
-    // Removido o RoutePrefix = string.Empty para que o Swagger responda em /swagger
 });
 
 // Mapeamento dos Health Checks exigidos pelo professor

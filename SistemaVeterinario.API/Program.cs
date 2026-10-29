@@ -1,13 +1,13 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.EntityFrameworkCore; // <-- Necessário para o .Database.Migrate() ou EnsureCreated()
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SistemaVeterinario.API.Services;
 using SistemaVeterinario.Application.Extensions;
 using SistemaVeterinario.Application.Service;
-using SistemaVeterinario.Infrastructure.Data; // <-- Ajusta para o namespace onde está o teu DbContext (ex: AppDbContext)
+using SistemaVeterinario.Infrastructure.Data;
 using SistemaVeterinario.Infrastructure.Extensions;
 using SistemaVeterinario.Infrastructure.NoSql;
 
@@ -104,8 +104,8 @@ using (var scope = app.Services.CreateScope())
 {
     try
     {
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>(); // Substitui "AppDbContext" pelo nome exato do teu DbContext se for diferente
-        dbContext.Database.Migrate(); // Cria a base de dados e aplica todas as migrations pendentes no Azure
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        dbContext.Database.Migrate(); // Aplica todas as migrations e cria a tabela TB_PET e as demais no Azure
     }
     catch (Exception ex)
     {

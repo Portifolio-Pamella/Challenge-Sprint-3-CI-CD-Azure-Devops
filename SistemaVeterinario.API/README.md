@@ -13,121 +13,45 @@ Este projeto é uma API RESTful desenvolvida em **ASP.NET Core** para o gerencia
 * **Oracle Database**
 * **Swagger (OpenAPI)** para documentação
 
----
+🚀 Guia Prático: Deploy do Zero no Azure Cloud Shell (Clyvo Veterinário)
+Este guia cobre o processo completo de ponta a ponta: autenticação, criação dos recursos de banco de dados, clonagem do seu repositório Git e publicação da API .NET 8 no App Service.
 
-## Pré-requisitos
-Para executar o projeto, certifique-se de ter instalado:
-* [.NET SDK 10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
-* [Oracle Database](https://www.oracle.com/br/database/technologies/oracle-database-software-downloads.html) (Xe, 19c ou superior)
-* [SQL Developer](https://www.oracle.com/br/database/sqldeveloper/technologies/download.html)
+Passo 1: Acessar o Azure Cloud Shell e Fazer Login
+Abra o Portal do Azure.
 
-## Como Executar
-1. **Clone o repositório:**
-   ```bash
-   git clone git@github.com:Portifolio-Pamella/sistema-veterinario-dotnet.git
-Configuração do Banco:
+Clique no ícone do Cloud Shell (>_) na barra superior direita e selecione o ambiente Bash.
 
-Crie um usuário no seu Oracle.
-
-No arquivo appsettings.json, atualize a OracleConnection com suas credenciais:
-
-JSON
-"ConnectionStrings": {
-  "OracleConnection": "User Id=USUARIO;Password=SENHA;Data Source=localhost:1521/xe;"
-}
-
-Aplicar Migrations:
-No terminal, na pasta do projeto, execute:
+Caso seja solicitado ou queira garantir que a sua sessão está autenticada, execute o comando de login:
 
 Bash
-dotnet ef database update
-Isso criará as tabelas e executará as Triggers e Sequences necessárias.
+az login
+Siga as instruções na tela (abrindo a página de autenticação e inserindo o código) para conectar a sua conta.
 
-Executar:
+Passo 2: Criar o Banco de Dados Azure SQL
+suba ao portal o arquivo C:\Users\pamel\Desktop\Challenge-Sprint-3-CI-CD-Azure-Devops\Scripts\deploy-database.sh
+e execute 
+
+Torne o script executável, limpe quebras de linha e execute-o:
 
 Bash
-dotnet run
-Acesse: http://localhost:5262/swagger
+sed -i -e 's/\r$//' deploy-database.sh
+chmod +x deploy-database.sh
+bash deploy-database.sh
+(Aguarde a finalização da criação do servidor SQL).
 
-Arquitetura do Projeto
-O sistema foi construído seguindo uma Arquitetura em Camadas (Data, Models, Repositories, Services e Controllers):
 
-Persistência: Utiliza EF Core com mapeamento fluido. As chaves primárias são gerenciadas pelo banco de dados através de Triggers e Sequences, garantindo autonomia do SGBD.
+Passo 3: Clonar o Repositório do Projeto
+Agora vamos baixar o código-fonte diretamente para o ambiente do Cloud Shell.Certifique-se de estar na sua pasta raiz do Cloud Shell:Bashcd ~
 
-API: Desenvolvida com o padrão REST, com tratamento global de erros (try-catch) para assegurar retornos HTTP semânticos (200, 201, 204, 400, 404).
+Clone o seu repositório do GitHub (substitua pela URL exata do seu repositório):   
 
-Documentação das Rotas
-Veterinário (/api/Veterinario)
-GET: Lista todos os veterinários.
+git clone https://github.com/Portifolio-Pamella/Challenge-Sprint-3-CI-CD-Azure-Devops.git
 
-GET /{id}: Busca um veterinário específico.
+Entre na pasta recém-criada do repositório:
 
-GET /especialidade/{especialidade}: Filtra veterinários por especialidade.
+cd cd ~/Challenge-Sprint-3-CI-CD-Azure-Devops/SistemaVeterinario.API
 
-POST: Cadastra um novo veterinário.
+Execute o arquivo C:\Users\pamel\Desktop\Challenge-Sprint-3-CI-CD-Azure-Devops\SistemaVeterinario.API\deploy-webapp.sh
 
-PUT /{id}: Atualiza um registro.
+Ele está dentro da pasta SistemaVeterinario.API. para que seja encontrado com maior facilidade o arquivo executavel, já que a arquitetura do projet é em camadas e o executavel não está na raiz.
 
-DELETE /{id}: Remove um registro.
-
-Tutor (/api/Tutor)
-GET: Lista todos os tutores.
-
-GET /{id}: Busca um tutor por ID.
-
-GET /cidade/{cidade}: Filtra tutores por cidade.
-
-POST: Cadastra um novo tutor.
-
-Pet (/api/Pet)
-GET: Lista todos os pets.
-
-GET /especie/{especie}: Filtra pets por espécie.
-
-POST: Cadastra um pet vinculado a um idTutor.
-
-PUT /{id}: Atualiza os dados do pet.
-
-Exemplos de JSON para Teste
-Cadastro de Veterinário
-JSON
-{
-  "nomeVeterinario": "Dra. Maria Teste",
-  "crmVeterinario": "CRM-12345",
-  "especialidadeVeterinario": "Felinos",
-  "telefoneVeterinario": "11999999999",
-  "emailVeterinario": "teste@email.com",
-  "statusVeterinario": "Ativo",
-  "dataCadastroVeterinario": "2026-05-23T21:00:00"
-}
-Cadastro de Tutor
-JSON
-{
-  "nomeTutor": "João Silva",
-  "cpfTutor": "123.456.789-00",
-  "telefoneTutor": "(11) 99999-8888",
-  "emailTutor": "joao.silva@email.com",
-  "cepTutor": "01001-000",
-  "ruaTutor": "Avenida Paulista",
-  "numeroTutor": "1000",
-  "complementoTutor": "Apto 52",
-  "bairroTutor": "Bela Vista",
-  "cidadeTutor": "São Paulo",
-  "estadoTutor": "SP",
-  "dataCadastroTutor": "2026-05-24T01:03:42.967Z"
-}
-Cadastro de Pet
-Certifique-se de usar um idTutor existente.
-
-JSON
-{
-  "idTutor": 0,
-  "nomePet": "Rex",
-  "especiePet": "Cachorro",
-  "racaPet": "Golden Retriever",
-  "sexoPet": "Macho",
-  "dataNascimentoPet": "2024-01-15T00:00:00Z",s
-  "pesoPet": 25.5,
-  "corPet": "Dourado",
-  "dataCadastroPet": "2026-05-24T01:03:42.967Z"
-}

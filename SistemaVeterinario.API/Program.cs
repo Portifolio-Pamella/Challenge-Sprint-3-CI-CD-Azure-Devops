@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SistemaVeterinario.API.Services;
 using SistemaVeterinario.Application.Extensions;
-using SistemaVeterinario.Application.Service; // <-- Adicionado para reconhecer o HistoricoAtendimentoService
+using SistemaVeterinario.Application.Service;
 using SistemaVeterinario.Infrastructure.Extensions;
 using SistemaVeterinario.Infrastructure.NoSql;
 
@@ -25,13 +25,12 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // ==========================================
 builder.Services.Configure<MongoDBSettings>(
     builder.Configuration.GetSection("GameStoreDatabase"));
-
 builder.Services.AddSingleton<MongoDbContext>();
 
 // Registro do Serviço NoSQL de Histórico de Atendimento
 builder.Services.AddSingleton<HistoricoAtendimentoService>();
-// ==========================================
 
+// ==========================================
 // Adiciona o Liveness check diretamente na API
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy(), tags: new[] { "live" });
@@ -95,11 +94,12 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+// Configuração do Swagger ativada em qualquer ambiente (Desenvolvimento e Produção)
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Clyvo API V1");
-    c.RoutePrefix = string.Empty; // Faz o Swagger abrir direto na raiz da URL!
+    // Removido o RoutePrefix = string.Empty para que o Swagger responda em /swagger
 });
 
 // Mapeamento dos Health Checks exigidos pelo professor
@@ -107,6 +107,7 @@ app.MapHealthChecks("/health/live", new HealthCheckOptions
 {
     Predicate = check => check.Tags.Contains("live")
 });
+
 app.MapHealthChecks("/health/ready", new HealthCheckOptions
 {
     Predicate = check => check.Tags.Contains("ready"),

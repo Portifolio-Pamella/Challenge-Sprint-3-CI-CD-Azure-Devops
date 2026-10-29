@@ -1,6 +1,5 @@
-cd ~/Challenge-Sprint-3-CI-CD-Azure-Devops
-echo '{
+{
   "sdk": {
     "version": "9.0.320"
   }
-}' > global.json
+}

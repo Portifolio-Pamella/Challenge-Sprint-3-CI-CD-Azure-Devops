@@ -1,0 +1,54 @@
+{
+  {
+    "idVeterinario": 1,
+    "nomeVeterinario": "Doutora Ana Paula",
+    "crmVeterinario": "CRM/SP 12345",
+    "especialidadeVeterinario": "Cirurgia Geral",
+    "telefoneVeterinario": "(11) 98888-7777",
+    "emailVeterinario": "ana.paula@clyvo.com",
+    "statusVeterinario": "Ativo",
+    "dataCadastroVeterinario": "2026-10-29T06:34:34.300Z"
+  },
+  {
+    "idTutor": 1,
+    "nomeTutor": "Carlos Alberto da Silva",
+    "cpfTutor": "123.456.789-00",
+    "telefoneTutor": "(11) 97777-6666",
+    "emailTutor": "carlos.silva@email.com",
+    "cepTutor": "04123-000",
+    "ruaTutor": "Avenida do Estado",
+    "numeroTutor": "1000",
+    "complementoTutor": "Apto 42",
+    "bairroTutor": "Sacomã",
+    "cidadeTutor": "São Paulo",
+    "estadoTutor": "SP",
+    "dataCadastroTutor": "2026-10-29T06:34:52.490Z"
+  },
+  {
+    "idPet": 100,
+    "idTutor": 1,
+    "tutor": {
+      "idTutor": 1,
+      "nomeTutor": "Carlos Alberto da Silva",
+      "cpfTutor": "123.456.789-00",
+      "telefoneTutor": "(11) 97777-6666",
+      "emailTutor": "carlos.silva@email.com",
+      "cepTutor": "04123-000",
+      "ruaTutor": "Avenida do Estado",
+      "numeroTutor": "1000",
+      "complementoTutor": "Apto 42",
+      "bairroTutor": "Sacomã",
+      "cidadeTutor": "São Paulo",
+      "estadoTutor": "SP",
+      "dataCadastroTutor": "2026-10-29T06:35:09.106Z"
+    },
+    "nomePet": "Mel",
+    "especiePet": "Cachorro",
+    "racaPet": "Golden Retriever",
+    "sexoPet": "Fêmea",
+    "dataNascimentoPet": "2024-05-15T00:00:00.000Z",
+    "pesoPet": 24.5,
+    "corPet": "Dourado",
+    "dataCadastroPet": "2026-10-29T06:35:09.106Z"
+  }
+}

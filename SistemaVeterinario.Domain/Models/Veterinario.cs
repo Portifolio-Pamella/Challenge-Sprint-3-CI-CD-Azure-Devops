@@ -40,7 +40,5 @@ public class Veterinario
 
     [Required]
     [Column("DATA_CADASTRO_VETERINARIO")]
-    public DateTime DataCadastroVeterinario
-    {
-        get.Set() } = DateTime.Now; // Nota: Se o seu código usa DateTime.Now, mantenha assim
-    }
+    public DateTime DataCadastroVeterinario { get; set; } = DateTime.Now;
+}

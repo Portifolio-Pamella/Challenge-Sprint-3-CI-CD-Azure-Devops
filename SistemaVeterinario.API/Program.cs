@@ -12,10 +12,18 @@ using SistemaVeterinario.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Leitura das chaves do JWT a partir do appsettings.json ou variáveis de ambiente
-var jwtKey = builder.Configuration["Jwt:Key"] ?? builder.Configuration["Jwt__Key"];
-var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? builder.Configuration["Jwt__Issuer"];
-var jwtAudience = builder.Configuration["Jwt:Audience"] ?? builder.Configuration["Jwt__Audience"];
+// Leitura segura das chaves do JWT com fallback para testes/desenvolvimento
+var jwtKey = builder.Configuration["Jwt:Key"]
+             ?? builder.Configuration["Jwt__Key"]
+             ?? "SuperSecretKeyJwtParaTestesComMaisDe32Caracteres123!";
+
+var jwtIssuer = builder.Configuration["Jwt:Issuer"]
+                ?? builder.Configuration["Jwt__Issuer"]
+                ?? "ClyvoIssuer";
+
+var jwtAudience = builder.Configuration["Jwt:Audience"]
+                  ?? builder.Configuration["Jwt__Audience"]
+                  ?? "ClyvoAudience";
 
 // Adiciona as camadas
 builder.Services.AddApplication();
@@ -24,21 +32,23 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // ==========================================
 // REGISTRO DO AZURE SQL (ENTITY FRAMEWORK CORE)
 // ==========================================
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+var connectionString = builder.Configuration.GetConnectionString("AzureSqlConnection")
+                       ?? builder.Configuration.GetConnectionString("DefaultConnection")
+                       ?? builder.Configuration["ConnectionStrings__AzureSqlConnection"]
                        ?? builder.Configuration["ConnectionStrings__DefaultConnection"];
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
-// ==========================================
 
+// ==========================================
 // Adiciona o Liveness check diretamente na API
+// ==========================================
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy(), tags: new[] { "live" });
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Configuração do Swagger atualizada para suportar o Token JWT (Cadeado no Swagger)
 // Configuração do Swagger atualizada para suportar o Token JWT e com Título Personalizado
 builder.Services.AddSwaggerGen(options =>
 {
@@ -85,7 +95,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtKey!)),
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtKey)),
 
             ValidateIssuer = true,
             ValidIssuer = jwtIssuer,
@@ -118,8 +128,8 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "Ocorreu um erro ao aplicar as migrações na base de dados.");
     }
 }
-// ==========================================
 
+// ==========================================
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -132,6 +142,7 @@ app.MapHealthChecks("/health/live", new HealthCheckOptions
 {
     Predicate = check => check.Tags.Contains("live")
 });
+
 app.MapHealthChecks("/health/ready", new HealthCheckOptions
 {
     Predicate = check => check.Tags.Contains("ready"),
@@ -147,4 +158,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Obrigatório para permitir que os testes de integração acedam à aplicação
 public partial class Program { }

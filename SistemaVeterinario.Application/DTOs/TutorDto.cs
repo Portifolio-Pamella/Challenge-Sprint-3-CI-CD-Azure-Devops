@@ -1,5 +1,8 @@
+using Swashbuckle.AspNetCore.Annotations;
+
 namespace SistemaVeterinario.Application.DTOs;
 
+[SwaggerSchema(Title = "TutorDto (Sprint 4 - Atualizado)", Description = "DTO responsável pelos dados do Tutor e respetivos links HATEOAS.")]
 public record TutorDto(
     decimal IdTutor,
     string NomeTutor,
@@ -14,5 +17,4 @@ public record TutorDto(
     string CidadeTutor,
     string EstadoTutor,
     DateTime DataCadastroTutor,
-    List<LinkDto> Links
-);
+    List<LinkDto> Links);

@@ -35,13 +35,12 @@ stages:
         projects: '**/*.sln'
         arguments: '--configuration $(buildConfiguration)'
 
-    # Testes temporariamente ignorados para permitir o deploy imediato
-    # - task: DotNetCoreCLI@2
-    #   displayName: 'Executar Testes'
-    #   inputs:
-    #     command: 'test'
-    #     projects: '**/*Tests*/*.csproj'
-    #     arguments: '--configuration $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Executar Testes'
+      inputs:
+        command: 'test'
+        projects: '**/*Tests*/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
 
     - task: DotNetCoreCLI@2
       displayName: 'Publicar aplicação'

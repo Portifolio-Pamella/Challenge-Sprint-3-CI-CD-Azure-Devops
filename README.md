@@ -33,7 +33,7 @@ A solução foi arquitetada seguindo boas práticas de desenvolvimento (Clean Ar
 ## Arquitetura do Sistema
 A imagem abaixo ilustra a arquitetura da solução e o fluxo das esteiras de CI/CD implementadas no Azure DevOps, desde o commit do desenvolvedor até o deploy no Azure App Service.
 
-![Diagrama da Arquitetura e Fluxo CI/CD](C:\Users\pamel\Desktop\Challenge-Sprint-3-CI-CD-Azure-Devops\Scripts\img-Arquitetura\Arquitetura CI_CD do Sistema Veterinário.png)
+![Diagrama da Arquitetura e Fluxo CI/CD](Scripts/img-Arquitetura/Arquitetura%20CI_CD%20do%20Sistema%20Veterinário.png)
 
 ---
 

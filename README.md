@@ -1,10 +1,10 @@
 # Sistema Veterinário API - Clyvo
 
 ## Integrantes
-*   Felipe Ribeiro Salles de Camargo | RM565224[cite: 5]
-*   João Pedro Pereira Camilo | RM562005[cite: 5]
-*   Lucas Matsubara Reis | RM565020[cite: 5]
-*   Pamella Christiny Chaves Brito | RM565206 (RM Principal)[cite: 5]
+*   Felipe Ribeiro Salles de Camargo | RM565224
+*   João Pedro Pereira Camilo | RM562005
+*   Lucas Matsubara Reis | RM565020
+*   Pamella Christiny Chaves Brito | RM565206 (RM Principal)
 
 ---
 
@@ -14,26 +14,26 @@ Esta aplicação consiste numa API RESTful desenvolvida para gerir os dados de u
 A solução foi arquitetada seguindo boas práticas de desenvolvimento (Clean Architecture) e, através deste repositório, implementámos um fluxo automatizado de Integração Contínua (CI) e Deploy Contínuo (CD) utilizando o Azure DevOps.
 
 **Stack Tecnológica:**
-*   **Linguagem:** C#[cite: 5]
-*   **Framework:** .NET 8 (ASP.NET Core)[cite: 5]
+*   **Linguagem:** C#
+*   **Framework:** .NET 8 (ASP.NET Core)
 *   **Mapeamento e ORM:** Entity Framework Core (EF Core)
-*   **Base de Dados (Relacional PaaS):** Azure SQL Database[cite: 5]
-*   **Testes:** xUnit (Testes Unitários)[cite: 5]
-*   **DevOps e CI/CD:** Azure Pipelines (YAML)[cite: 5]
-*   **Hosting:** Azure App Service (Linux)[cite: 5]
+*   **Base de Dados (Relacional PaaS):** Azure SQL Database
+*   **Testes:** xUnit (Testes Unitários)
+*   **DevOps e CI/CD:** Azure Pipelines (YAML)
+*   **Hosting:** Azure App Service (Linux)
 
 ---
 
 ## Links do Projeto
 *   **Link do Vídeo de Apresentação:** `[Adicionar link do vídeo aqui]`
-*   **Link do Projeto no Azure DevOps:** `[Adicionar link do board/repositório no Azure DevOps aqui]`
+*   **Link do Projeto no Azure DevOps:** `https://dev.azure.com/RM565020/Sprint%204%20%E2%80%93%20Azure%20DevOps`
 
 ---
 
 ## Arquitetura do Sistema
 A imagem abaixo ilustra a arquitetura da solução e o fluxo das esteiras de CI/CD implementadas no Azure DevOps, desde o commit do desenvolvedor até o deploy no Azure App Service.
 
-![Diagrama da Arquitetura e Fluxo CI/CD](Scripts/img-Arquitetura/Arquitetura%20e%20CI_CD%20do%20Sistema%20Veterinário.png)
+![Diagrama da Arquitetura e Fluxo CI/CD](C:\Users\pamel\Desktop\Challenge-Sprint-3-CI-CD-Azure-Devops\Scripts\img-Arquitetura\Arquitetura CI_CD do Sistema Veterinário.png)
 
 ---
 

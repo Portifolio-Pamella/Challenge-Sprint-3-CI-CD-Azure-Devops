@@ -54,7 +54,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Clyvo API - Sistema Veterinário (Sprint 4)",
+        Title = "Clyvo API - Sistema Veterinário",
         Version = "v1",
         Description = "API RESTful desenvolvida com .NET 8 e Azure SQL (PaaS) para gestão de clínica veterinária."
     });

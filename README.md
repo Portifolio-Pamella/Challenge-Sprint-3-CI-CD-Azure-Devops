@@ -1,26 +1,26 @@
 # Sistema Veterinário API - Clyvo
 
 ## Integrantes
-*   Felipe Ribeiro Salles de Camargo | RM565224
-*   João Pedro Pereira Camilo | RM562005
-*   Lucas Matsubara Reis | RM565020
-*   Pamella Christiny Chaves Brito | RM565206 (RM Principal)
+*   Felipe Ribeiro Salles de Camargo | RM565224[cite: 5]
+*   João Pedro Pereira Camilo | RM562005[cite: 5]
+*   Lucas Matsubara Reis | RM565020[cite: 5]
+*   Pamella Christiny Chaves Brito | RM565206 (RM Principal)[cite: 5]
 
 ---
 
 ## Descrição da Solução
-Esta aplicação consiste numa API RESTful desenvolvida para gerir os dados de uma clínica veterinária. O sistema permite o cadastro e consulta de clientes, animais, bem como o registo de atendimentos e histórico médico.
+Esta aplicação consiste numa API RESTful desenvolvida para gerir os dados de uma clínica veterinária. O sistema permite o registo, consulta e gestão de tutores, pets e veterinários.
 
-A solução foi arquitetada seguindo boas práticas de desenvolvimento e, através deste repositório, implementámos um fluxo automatizado de Integração Contínua (CI) e Deploy Contínuo (CD) utilizando o Azure DevOps.
+A solução foi arquitetada seguindo boas práticas de desenvolvimento (Clean Architecture) e, através deste repositório, implementámos um fluxo automatizado de Integração Contínua (CI) e Deploy Contínuo (CD) utilizando o Azure DevOps.
 
 **Stack Tecnológica:**
-*   **Linguagem:** C#
-*   **Framework:** .NET 8 (ASP.NET Core)
-*   **Arquitetura:** Monolítica com separação de camadas (API, Application, Domain, Infrastructure)
-*   **Base de Dados (NoSQL):** MongoDB (hospedado no MongoDB Atlas)
-*   **Testes:** xUnit (Testes Unitários)
-*   **DevOps e CI/CD:** Azure Pipelines (YAML)
-*   **Hosting:** Azure App Service (Linux)
+*   **Linguagem:** C#[cite: 5]
+*   **Framework:** .NET 8 (ASP.NET Core)[cite: 5]
+*   **Mapeamento e ORM:** Entity Framework Core (EF Core)
+*   **Base de Dados (Relacional PaaS):** Azure SQL Database[cite: 5]
+*   **Testes:** xUnit (Testes Unitários)[cite: 5]
+*   **DevOps e CI/CD:** Azure Pipelines (YAML)[cite: 5]
+*   **Hosting:** Azure App Service (Linux)[cite: 5]
 
 ---
 
@@ -44,11 +44,11 @@ Abaixo está a descrição detalhada do conteúdo de cada subpasta:
 
 ### 1. `database/`
 Contém scripts relacionados à base de dados.
-*   `create_banco.sql`: Script SQL para a criação inicial da estrutura da base de dados (caso aplicável ao contexto relacional do projeto ou para fins de documentação da modelagem).
+*   `create_banco.sql`: Script SQL para a criação inicial ou documentação do modelo relacional no Azure SQL.
 
 ### 2. `Executaveis-Azure/`
 Contém scripts de automação (Bash) para deploy de recursos na Azure via CLI.
-*   `deploy-database.sh`: Script para automatizar o deploy ou atualização da base de dados na nuvem.
+*   `deploy-database.sh`: Script para automatizar o deploy ou gestão da base de dados na nuvem.
 *   `deploy-webapp.sh`: Script para automatizar o provisionamento ou deploy da aplicação (Web App) no Azure App Service.
 
 ### 3. `img-Arquitetura/`
@@ -57,7 +57,7 @@ Contém os diagramas visuais do projeto.
 
 ### 4. `Json-Testes-API/`
 Contém ficheiros JSON utilizados para testes manuais ou automatizados dos endpoints da API.
-*   `posts.json`: Massa de dados de exemplo (formato JSON) para simular o cadastro de novos atendimentos ou pacientes na API (pode ser importado em ferramentas como Postman ou Insomnia).
+*   `posts.json`: Massa de dados de exemplo (formato JSON) para simular requisições aos endpoints da API.
 
 ---
 
@@ -71,9 +71,11 @@ O pipeline é dividido em dois estágios:
     *   Restaura as dependências NuGet.
     *   Compila a solução .NET 8.
     *   Executa os testes unitários (xUnit).
-    *   Publica o artefacto (ficheiro `.zip` da API).
+    *   Publica o artefacto compactado num ficheiro `.zip` limpo.
 2.  **Deploy no Azure (CD):**
     *   Descarrega o artefacto gerado no estágio anterior.
-    *   Faz o deploy para o Azure Web App (`clyvo-api-rm565206`) utilizando a tarefa `AzureWebApp@1` (ZIP Deploy).
+    *   Faz o deploy automatizado para o Azure Web App (`clyvo-api-rm565206`) utilizando a tarefa `AzureWebApp@1` (ZIP Deploy).
+    *   **Migrações Automáticas:** No arranque da aplicação (`Program.cs`), o EF Core executa o comando `dbContext.Database.Migrate()`, garantindo que as tabelas (`TB_TUTOR`, `TB_PET`, `TB_VETERINARIO`) são criadas ou atualizadas dinamicamente no **Azure SQL Database**.
 
-Para configurar o ambiente no Azure, certifique-se de configurar as *Application Settings* no portal do Azure com a *Connection String* do MongoDB Atlas.
+Para configurar o ambiente no Azure, certifique-se de configurar a *Connection String* nas definições da aplicação do Web App com a chave:
+*   `ConnectionStrings__DefaultConnection` apontando para o seu servidor Azure SQL.

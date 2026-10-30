@@ -37,7 +37,6 @@ stages:
 
     - task: DotNetCoreCLI@2
       displayName: 'Executar Testes'
-      continueOnError: true # Mantém a regra de CI cumprida, mas evita bloqueios por falhas pontuais de ambiente nos testes
       inputs:
         command: 'test'
         projects: '**/*Tests*/*.csproj'

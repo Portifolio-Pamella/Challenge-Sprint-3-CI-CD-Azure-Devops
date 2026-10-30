@@ -27,7 +27,7 @@ public class VeterinarioService : IVeterinarioService
         catch (DbUpdateException ex)
         {
             var innerError = ex.InnerException?.Message ?? ex.Message;
-            throw new System.Exception($"Erro detalhado do Oracle: {innerError}");
+            throw new System.Exception($"Erro detalhado na Base de Dados (Azure SQL): {innerError}");
         }
     }
 

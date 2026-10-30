@@ -14,7 +14,10 @@ namespace SistemaVeterinario.Infrastructure.Data.Mappings
 
             builder.Property(p => p.IdPet).HasColumnName("ID_PET");
 
-            builder.Property(p => p.IdTutor).HasColumnName("ID_TUTOR").IsRequired();
+            builder.Property(t => t.IdTutor)
+                .HasColumnName("ID_TUTOR")
+                .HasColumnType("decimal(10,0)")
+                .IsRequired();
 
             builder.Property(p => p.NomePet)
                 .HasColumnName("NOME_PET")

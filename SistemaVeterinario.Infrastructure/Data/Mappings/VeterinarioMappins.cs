@@ -12,7 +12,10 @@ namespace SistemaVeterinario.Infrastructure.Data.Mappings
 
             builder.HasKey(v => v.IdVeterinario);
 
-            builder.Property(v => v.IdVeterinario).HasColumnName("ID_VETERINARIO");
+            builder.Property(v => v.IdVeterinario)
+                .HasColumnName("ID_VETERINARIO")
+                .HasColumnType("decimal(10,0)") // <-- Adiciona isto para corrigir o aviso do EF Core
+                .IsRequired();  
 
             builder.Property(v => v.NomeVeterinario)
                 .HasColumnName("NOME_VETERINARIO")

@@ -9,7 +9,6 @@ using SistemaVeterinario.Application.Extensions;
 using SistemaVeterinario.Application.Service;
 using SistemaVeterinario.Infrastructure.Data;
 using SistemaVeterinario.Infrastructure.Extensions;
-using SistemaVeterinario.Infrastructure.NoSql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,15 +22,13 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // ==========================================
-// REGISTRO DO MONGODB (NO-SQL)
+// REGISTRO DO AZURE SQL (ENTITY FRAMEWORK CORE)
 // ==========================================
-builder.Services.Configure<MongoDBSettings>(
-    builder.Configuration.GetSection("GameStoreDatabase"));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                       ?? builder.Configuration["ConnectionStrings__DefaultConnection"];
 
-builder.Services.AddSingleton<MongoDbContext>();
-
-// Registro do Serviço NoSQL de Histórico de Atendimento
-builder.Services.AddSingleton<HistoricoAtendimentoService>();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
 // ==========================================
 
 // Adiciona o Liveness check diretamente na API
@@ -105,7 +102,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        dbContext.Database.Migrate(); // Aplica todas as migrations e cria a tabela TB_PET e as demais no Azure
+        dbContext.Database.Migrate(); // Aplica todas as migrations e cria as tabelas no Azure SQL
     }
     catch (Exception ex)
     {

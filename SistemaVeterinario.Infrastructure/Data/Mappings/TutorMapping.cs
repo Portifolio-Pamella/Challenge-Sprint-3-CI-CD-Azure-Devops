@@ -12,7 +12,10 @@ public class TutorMapping : IEntityTypeConfiguration<Tutor>
 
         builder.HasKey(t => t.IdTutor);
 
-        builder.Property(t => t.IdTutor).HasColumnName("ID_TUTOR");
+        builder.Property(t => t.IdTutor)
+            .HasColumnName("ID_TUTOR")
+            .HasColumnType("decimal(10,0)")
+            .IsRequired();
         builder.Property(t => t.NomeTutor).HasColumnName("NOME_TUTOR").HasMaxLength(100).IsRequired();
         builder.Property(t => t.CpfTutor).HasColumnName("CPF_TUTOR").HasMaxLength(14).IsRequired();
         builder.Property(t => t.TelefoneTutor).HasColumnName("TELEFONE_TUTOR").HasMaxLength(20).IsRequired();

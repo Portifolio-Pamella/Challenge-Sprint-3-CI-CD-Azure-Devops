@@ -25,12 +25,8 @@ namespace SistemaVeterinario.Infrastructure.Migrations
             modelBuilder.Entity("SistemaVeterinario.Domain.Models.Pet", b =>
                 {
                     b.Property<decimal>("IdPet")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(10)
-                        .HasColumnType("decimal(10,0)")
+                        .HasColumnType("decimal(18,2)")
                         .HasColumnName("ID_PET");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("IdPet"));
 
                     b.Property<string>("CorPet")
                         .IsRequired()
@@ -53,7 +49,6 @@ namespace SistemaVeterinario.Infrastructure.Migrations
                         .HasColumnName("ESPECIE_PET");
 
                     b.Property<decimal>("IdTutor")
-                        .HasPrecision(10)
                         .HasColumnType("decimal(10,0)")
                         .HasColumnName("ID_TUTOR");
 
@@ -64,8 +59,7 @@ namespace SistemaVeterinario.Infrastructure.Migrations
                         .HasColumnName("NOME_PET");
 
                     b.Property<decimal>("PesoPet")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)")
+                        .HasColumnType("decimal(18,2)")
                         .HasColumnName("PESO_PET");
 
                     b.Property<string>("RacaPet")
@@ -90,12 +84,8 @@ namespace SistemaVeterinario.Infrastructure.Migrations
             modelBuilder.Entity("SistemaVeterinario.Domain.Models.Tutor", b =>
                 {
                     b.Property<decimal>("IdTutor")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(10)
                         .HasColumnType("decimal(10,0)")
                         .HasColumnName("ID_TUTOR");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("IdTutor"));
 
                     b.Property<string>("BairroTutor")
                         .IsRequired()
@@ -175,13 +165,13 @@ namespace SistemaVeterinario.Infrastructure.Migrations
             modelBuilder.Entity("SistemaVeterinario.Domain.Models.Veterinario", b =>
                 {
                     b.Property<decimal>("IdVeterinario")
-                        .HasPrecision(10)
                         .HasColumnType("decimal(10,0)")
                         .HasColumnName("ID_VETERINARIO");
 
                     b.Property<string>("CrmVeterinario")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)")
                         .HasColumnName("CRM_VETERINARIO");
 
                     b.Property<DateTime>("DataCadastroVeterinario")
@@ -189,35 +179,37 @@ namespace SistemaVeterinario.Infrastructure.Migrations
                         .HasColumnName("DATA_CADASTRO_VETERINARIO");
 
                     b.Property<string>("EmailVeterinario")
-                        .HasColumnType("nvarchar(450)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("EMAIL_VETERINARIO");
 
                     b.Property<string>("EspecialidadeVeterinario")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("ESPECIALIDADE_VETERINARIO");
 
                     b.Property<string>("NomeVeterinario")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("NOME_VETERINARIO");
 
                     b.Property<string>("StatusVeterinario")
-                        .HasColumnType("nvarchar(max)")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasDefaultValue("ATIVO")
                         .HasColumnName("STATUS_VETERINARIO");
 
                     b.Property<string>("TelefoneVeterinario")
-                        .HasColumnType("nvarchar(max)")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
                         .HasColumnName("TELEFONE_VETERINARIO");
 
                     b.HasKey("IdVeterinario");
-
-                    b.HasIndex("CrmVeterinario")
-                        .IsUnique();
-
-                    b.HasIndex("EmailVeterinario")
-                        .IsUnique()
-                        .HasFilter("[EMAIL_VETERINARIO] IS NOT NULL");
 
                     b.ToTable("TB_VETERINARIO", (string)null);
                 });

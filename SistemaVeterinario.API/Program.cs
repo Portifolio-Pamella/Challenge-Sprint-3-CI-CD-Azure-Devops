@@ -39,12 +39,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 // Configuração do Swagger atualizada para suportar o Token JWT (Cadeado no Swagger)
+// Configuração do Swagger atualizada para suportar o Token JWT e com Título Personalizado
 builder.Services.AddSwaggerGen(options =>
 {
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Clyvo API - Sistema Veterinário (Sprint 4)",
+        Version = "v1",
+        Description = "API RESTful desenvolvida com .NET 8 e Azure SQL (PaaS) para gestão de clínica veterinária."
+    });
+
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Type = SecuritySchemeType.Http,Title =
+        Type = SecuritySchemeType.Http,
         Scheme = "bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
